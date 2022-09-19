@@ -3,7 +3,7 @@ project(anf_launch)
 
 find_package(ament_cmake REQUIRED)
 
-install(DIRECTORY launch DESTINATION share/${PROJECT_NAME})
+install(DIRECTORY launch bb8 DESTINATION share/${PROJECT_NAME})
 
 file(GLOB scripts src/*)
 install(PROGRAMS ${scripts} DESTINATION lib/${PROJECT_NAME})
