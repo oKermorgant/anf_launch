@@ -1,0 +1,57 @@
+#!/usr/bin/env python3
+
+import rclpy
+from rclpy.node import Node
+from turtlesim.srv import TeleportAbsolute, SetPen
+from math import cos, sin, atan2
+
+a = 3
+b = 4
+w = 0.7
+dt = 0.05
+
+class Looper(Node):
+    def __init__(self):
+        super().__init__('open_loop_cmd')
+        
+        self.looper = Node('looper')
+        self.client = self.looper.create_client(TeleportAbsolute, '/turtle1/teleport_absolute')
+        self.client.wait_for_service()
+        
+        # no pen
+        pen_srv = self.create_client(SetPen, '/turtle1/set_pen')
+        pen_srv.wait_for_service()
+        no_pen = SetPen.Request()
+        no_pen.off = 1
+        res = pen_srv.call_async(no_pen)
+        rclpy.spin_until_future_complete(self, res)  
+        
+        self.pose = TeleportAbsolute.Request()
+        
+        self.timer = self.create_timer(dt, self.update_pose)
+        self.t = 0             
+        
+    def update_pose(self):
+
+        c,s = cos(w*self.t),sin(w*self.t)
+        
+        self.pose.x = (a + b*c)*c + 3
+        self.pose.y = (a + b*c)*s + 5
+        vx = -a*s-2*b*c*s
+        vy = a*c + b - 2*b*s*s
+        self.pose.theta = atan2(vy, vx)
+        
+        res = self.client.call_async(self.pose)
+        rclpy.spin_until_future_complete(self.looper, res)       
+        
+        
+        self.t += dt
+        
+rclpy.init()
+looper = Looper()
+
+rclpy.spin(looper)
+
+# clean exit on Ctrl-C
+looper.destroy_node()
+rclpy.shutdown()

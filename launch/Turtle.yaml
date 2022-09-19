@@ -1,0 +1,26 @@
+cmd_vel:
+    type: geometry_msgs/Twist
+    vx: 
+        min: -1
+        max: 1
+        to: linear.x
+        default: 0.
+    vy: 
+        min: -1
+        max: 1
+        to: linear.y      
+    wz: 
+        min: -1
+        max: 1
+        to: angular.z
+set_pen:
+    type: turtlesim/srv/SetPen
+    'off':
+        to: 'off'
+        default: 0
+        min: 0
+        max: 1
+    r: 255
+    g: 255
+    b: 255
+    width: 2
