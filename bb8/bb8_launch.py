@@ -11,5 +11,5 @@ def generate_launch_description():
     # run RViz2
     rviz_config_file = sl.find('anf_launch', 'bb8.rviz')
     sl.node('rviz2','rviz2', arguments=['-d', rviz_config_file])
-    
+        
     return sl.launch_description()
