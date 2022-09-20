@@ -18,8 +18,7 @@ class Tracker(Node):
         # no pen
         pen_srv = self.create_client(SetPen, 'set_pen')
         pen_srv.wait_for_service()
-        no_pen = SetPen.Request()
-        no_pen.off = 1
+        no_pen = SetPen.Request(off = 1)
         res = pen_srv.call_async(no_pen)
         rclpy.spin_until_future_complete(self, res)
         

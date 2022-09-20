@@ -1,6 +1,6 @@
 from launch import LaunchDescription
 from launch_ros.actions import Node, PushRosNamespace
-from launch.actions import DeclareLaunchArgument, GroupAction
+from launch.actions import DeclareLaunchArgument, GroupAction, DeclareLaunchArgument
 from launch.conditions import IfCondition, UnlessCondition
 from launch.substitutions import LaunchConfiguration
 from ament_index_python.packages import get_package_share_directory as lookup
@@ -14,7 +14,8 @@ def generate_launch_description():
     ld.add_action(sim_node)
     
     # declare a (Boolean) argument
-    manual = LaunchConfiguration('manual', default=False)
+    ld.add_action(DeclareLaunchArgument('manual', default_value='False'))
+    manual = LaunchConfiguration('manual')
     
     # open-loop node
     loop_node = Node(package='anf_launch', executable='loop', condition = UnlessCondition(manual))
@@ -26,7 +27,7 @@ def generate_launch_description():
                        arguments = [slider_config])
     
     # namespaced group with those 2 nodes
-    namespaced = GroupAction([PushRosNamespace('turtle1'),loop_node, slider_node])
+    namespaced = GroupAction([PushRosNamespace('turtle1'), loop_node, slider_node])
     ld.add_action(namespaced)
     
     return ld
