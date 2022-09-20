@@ -13,8 +13,6 @@ def set_proc_name(newname):
     buff.value = newname
     libc.prctl(15, byref(buff), 0, 0, 0)
     
-set_proc_name('open_loop_cmd'.encode())
-
 a = 3
 b = 4
 w = 0.7
@@ -22,9 +20,11 @@ dt = 0.05
 
 class Looper(Node):
     def __init__(self):
-        super().__init__('open_loop_cmd')
+        super().__init__('looper')
         
-        self.looper = Node('looper')
+        set_proc_name(self.get_fully_qualified_name()[1:].replace('/','_').encode())
+        
+        self.looper = Node('loop_client')
         self.client = self.looper.create_client(TeleportAbsolute, '/turtle1/teleport_absolute')
         self.client.wait_for_service()
         
