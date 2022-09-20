@@ -13,7 +13,7 @@ def generate_launch_description():
         
         with sl.group(unless_arg='manual'):
             # open loop
-            sl.node('anf_launch', 'loop')            
+            sl.node('anf_launch', 'loop', respawn = True, output='screen')
         
         with sl.group(if_arg='manual'):
             # manual control
