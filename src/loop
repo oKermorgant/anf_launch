@@ -24,16 +24,16 @@ class Looper(Node):
         
         set_proc_name(self.get_fully_qualified_name()[1:].replace('/','_').encode())
         
-        self.looper = Node('loop_client')
-        self.client = self.looper.create_client(TeleportAbsolute, '/turtle1/teleport_absolute')
+        self.client = self.create_client(TeleportAbsolute, '/turtle1/teleport_absolute')
         self.client.wait_for_service()
+        self.move_result = None
         
         # no pen
         pen_srv = self.create_client(SetPen, '/turtle1/set_pen')
         pen_srv.wait_for_service()
         no_pen = SetPen.Request(off = 1)
         res = pen_srv.call_async(no_pen)
-        rclpy.spin_until_future_complete(self, res)  
+        rclpy.spin_until_future_complete(self, res)
         
         self.pose = TeleportAbsolute.Request()
         
@@ -41,7 +41,14 @@ class Looper(Node):
         self.t = 0             
         
     def update_pose(self):
-
+        
+        self.t += dt
+        
+        if self.move_result is not None:
+            # service was called, check if result has arrived
+            if not self.move_result.done():
+                return
+            
         c,s = cos(w*self.t),sin(w*self.t)
         
         self.pose.x = (a + b*c)*c + 3
@@ -50,11 +57,9 @@ class Looper(Node):
         vy = a*c + b - 2*b*s*s
         self.pose.theta = atan2(vy, vx)
         
-        res = self.client.call_async(self.pose)
-        rclpy.spin_until_future_complete(self.looper, res)       
+        self.move_result = self.client.call_async(self.pose)
+                
         
-        
-        self.t += dt
         
 rclpy.init()
 looper = Looper()
