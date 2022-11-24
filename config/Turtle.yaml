@@ -20,7 +20,23 @@ set_pen:
         default: 0
         min: 0
         max: 1
-    r: 255
-    g: 255
-    b: 255
-    width: 2
+    red:
+        to: 'r'
+        default: 255
+        min: 0
+        max: 255
+    green:
+        to: 'g'
+        default: 0
+        min: 0
+        max: 255
+    blue:
+        to: 'b'
+        default: 0
+        min: 0
+        max: 255
+    width:
+        to: 'width'
+        default: 0
+        min: 0
+        max: 4

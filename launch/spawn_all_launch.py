@@ -17,11 +17,12 @@ def launch_setup():
         y = 10*random.random()
         theta = 2*pi * random.random()
 
+        # turtle #n tracks turtle #(n-1)
         target = '' if sl.arg('manual') else f'turtle{k+1}'
         
         with sl.group(ns = name):
         
-            sl.include('anf_launch', 'single_launch.py',
+            sl.include('anf_launch', 'spawn_single_launch.py',
                         launch_arguments={'x': x,
                                             'y': y,
                                             'theta': theta,

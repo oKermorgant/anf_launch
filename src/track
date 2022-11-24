@@ -13,7 +13,10 @@ class Tracker(Node):
     def __init__(self):
         super().__init__('tracker')
         
-        self.target = self.declare_parameter("target", 'turtle1').value        
+        self.target = self.declare_parameter("target", 'turtle1').value
+
+        from time import sleep
+        sleep(self.declare_parameter("wait", 1).value + 1)
         
         # no pen
         pen_srv = self.create_client(SetPen, 'set_pen')

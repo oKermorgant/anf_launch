@@ -24,11 +24,10 @@ def generate_launch_description():
     loop_node = Node(package='anf_launch', executable='loop', condition = UnlessCondition(manual))
     
     # manual node
-    slider_config = f"{lookup('anf_launch')}/launch/Turtle.yaml"
+    slider_config = f"{lookup('anf_launch')}/config/Turtle.yaml"
     slider_node = Node(package='slider_publisher', executable='slider_publisher', name='turtle1',
                        condition = IfCondition(manual),
                        arguments = [slider_config])
-
     
     # namespaced group with those 2 nodes under the control condition
     namespaced = GroupAction([PushRosNamespace('turtle1'),loop_node, slider_node], condition=IfCondition(control))
