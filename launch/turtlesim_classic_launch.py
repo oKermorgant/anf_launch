@@ -16,6 +16,9 @@ def generate_launch_description():
     # declare a (Boolean) argument
     ld.add_action(DeclareLaunchArgument('manual', default_value='False'))
     manual = LaunchConfiguration('manual')
+
+    ld.add_action(DeclareLaunchArgument('control', default_value='True'))
+    control = LaunchConfiguration('control')
     
     # open-loop node
     loop_node = Node(package='anf_launch', executable='loop', condition = UnlessCondition(manual))
@@ -25,9 +28,10 @@ def generate_launch_description():
     slider_node = Node(package='slider_publisher', executable='slider_publisher', name='turtle1',
                        condition = IfCondition(manual),
                        arguments = [slider_config])
+
     
-    # namespaced group with those 2 nodes
-    namespaced = GroupAction([PushRosNamespace('turtle1'), loop_node, slider_node])
+    # namespaced group with those 2 nodes under the control condition
+    namespaced = GroupAction([PushRosNamespace('turtle1'),loop_node, slider_node], condition=IfCondition(control))
     ld.add_action(namespaced)
     
     return ld

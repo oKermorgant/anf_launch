@@ -4,12 +4,13 @@ def generate_launch_description():
     
     sl = SimpleLauncher(use_sim_time = False)
     sl.declare_arg('manual', False)
+    sl.declare_arg('control',True)
     
     # run turtlesim with turtle1
     sl.node('turtlesim', 'turtlesim_node')
     
     # run the open-loop or manual control
-    with sl.group(ns='turtle1'):
+    with sl.group(ns='turtle1',if_arg='control'):
         
         with sl.group(unless_arg='manual'):
             # open loop
