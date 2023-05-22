@@ -7,6 +7,7 @@ sl.declare_arg('manual', False)
 
 sl.declare_arg('n', 4, description = 'How many turtles')
 
+
 def launch_setup():
 
     for k in range(sl.arg('n')):

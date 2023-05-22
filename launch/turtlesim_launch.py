@@ -22,7 +22,8 @@ def generate_launch_description():
         
         with sl.group(if_arg='manual'):
             # manual control
+            print(sl.find('anf_launch', 'Turtle.yaml'))
             sl.node('slider_publisher', 'slider_publisher',name='turtle1',
                     arguments=[sl.find('anf_launch', 'Turtle.yaml')])
-    
+
     return sl.launch_description()

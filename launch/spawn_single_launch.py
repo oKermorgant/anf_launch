@@ -9,12 +9,12 @@ sl.declare_arg('name', 'turtle')
 sl.declare_arg('target', '')
 sl.declare_arg('wait', 1)
 
+
 def launch_setup():
 
     # spawn the turtle anyway
     sl.node('anf_launch', 'spawn',
         parameters = sl.arg_map('x','y','theta','name'))
-
 
     if len(sl.arg('target')) > 0:
         sl.node('anf_launch', 'track', parameters=sl.arg_map('target','wait'))

@@ -6,6 +6,7 @@ from geometry_msgs.msg import Twist
 from turtlesim.msg import Pose
 from turtlesim.srv import SetPen
 from math import cos, sin, atan2, pi
+from rcl_interfaces.msg import SetParametersResult
 
 dt = 0.1
 
@@ -33,13 +34,35 @@ class Tracker(Node):
         self.target_sub = self.create_subscription(Pose, f'/{self.target}/pose', self.get_target_pose, 10)
         
         self.cmd = Twist()
-        self.cmd_vel = self.create_publisher(Twist, 'cmd_vel', 10)        
+        self.cmd_vel = self.create_publisher(Twist, 'cmd_vel', 10)
+
+        # gains
+        self.Kv = self.declare_parameter("Kv", 2.).value
+        self.Kw = self.declare_parameter("Kw", 2.).value
+        self.d = self.declare_parameter("d", 1.).value
+        self.add_on_set_parameters_callback(self.param_change)
         
         self.timer = self.create_timer(dt, self.compute_cmd)
+
+    def param_change(self, params):
+
+        accept = True
+        for param in params:
+            self.get_logger().warn('Request: {} -> {}'.format(param.name, param.value))
+            if param.value < 0:
+                accept = False
+            else:
+                if param.name == 'Kv':
+                    self.Kv = param.value
+                elif param.name == 'Kw':
+                    self.Kw = param.value
+                elif param.name == 'd':
+                    self.d = param.value
+
+        return SetParametersResult(successful=accept)
         
     def get_pose(self, msg):
         self.pose = msg
-        
         
     def get_target_pose(self, msg):
         self.target_pose = msg
@@ -57,8 +80,8 @@ class Tracker(Node):
         theta = atan2(dy,dx) - self.pose.theta
         theta = (theta+pi) % (2*pi) - pi
         
-        self.cmd.linear.x = 2.5*(dx*c+dy*s-1.5)
-        self.cmd.angular.z = 2.5 * theta
+        self.cmd.linear.x = self.Kv*(dx*c+dy*s-self.d)
+        self.cmd.angular.z = self.Kw * theta
         
         self.cmd_vel.publish(self.cmd)
         

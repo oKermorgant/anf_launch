@@ -9,6 +9,6 @@ def generate_launch_description():
         sl.node('joy', 'joy_node')
         sl.node('teleop_twist_joy', 'teleop_node',
             parameters=[sl.find('anf_launch', 'xbox.config.yaml')])
-            #remappings = {'cmd_vel': sl.arg('turtle') + '/cmd_vel'})
+            #parameters=[sl.find('teleop_twist_joy', 'xbox.config.yaml')])   # wrong namespace
 
     return sl.launch_description()
