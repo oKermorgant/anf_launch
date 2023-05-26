@@ -9,26 +9,22 @@ sl.declare_arg('n', 4, description = 'How many turtles')
 # we need to use opaque function to resolve arguments as Python types (needed for range)
 def launch_setup():
 
-    for k in range(sl.arg('n')):
+    # turtle 1 is spawned already
+    for k in range(2, sl.arg('n')+3):
 
-        name = f'turtle{k+2}'
-
-        x = 10*random.random()
-        y = 10*random.random()
-        theta = 2*pi * random.random()
+        turtle_args = {}
+        turtle_args['name'] = name = f'turtle{k}'
+        turtle_args['x'] = 10*random.random()
+        turtle_args['y'] = 10*random.random()
+        turtle_args['theta'] = 2*pi * random.random()
 
         # turtle #n tracks turtle #(n-1)
-        target = f'turtle{k+1}'
+        turtle_args['target'] = f'turtle{k-1}'
         
         with sl.group(ns = name):
-        
             sl.include('anf_launch', 'spawn_single_launch.py',
-                        launch_arguments={'x': x,
-                                            'y': y,
-                                            'theta': theta,
-                                            'name': name,
-                                            'target': target,
-                                            'wait': k})
+                        launch_arguments=turtle_args)
+
     return sl.launch_description()
 
 
