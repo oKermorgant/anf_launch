@@ -6,9 +6,10 @@ from geometry_msgs.msg import Twist
 from turtlesim.msg import Pose
 from turtlesim.srv import SetPen
 from math import cos, sin, atan2, pi
-from rcl_interfaces.msg import SetParametersResult
+from rcl_interfaces.msg import SetParametersResult, ParameterDescriptor, FloatingPointRange
 
 dt = 0.1
+
 
 class Tracker(Node):
     def __init__(self):
@@ -37,12 +38,20 @@ class Tracker(Node):
         self.cmd_vel = self.create_publisher(Twist, 'cmd_vel', 10)
 
         # gains
-        self.Kv = self.declare_parameter("Kv", 2.).value
-        self.Kw = self.declare_parameter("Kw", 2.).value
-        self.d = self.declare_parameter("d", 1.).value
+        self.Kv = self.declare_bounded_param("Kv", 2., 0., 10., 'Linear gain')
+        self.Kw = self.declare_bounded_param("Kw", 2.5, 0., 10., 'Angular gain')
+        self.d = self.declare_bounded_param("d", 1., 0., 5., 'Tracking distance')
         self.add_on_set_parameters_callback(self.param_change)
         
         self.timer = self.create_timer(dt, self.compute_cmd)
+
+    def declare_bounded_param(self, name, default, low, high, description = None):
+        descr = ParameterDescriptor(
+                name = name,
+                floating_point_range = [FloatingPointRange(
+                    from_value = float(low), to_value = float(high))],
+                description = description)
+        return self.declare_parameter(name, float(default), descr).value
 
     def param_change(self, params):
 
