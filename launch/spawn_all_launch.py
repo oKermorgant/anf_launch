@@ -3,11 +3,10 @@ import random
 from math import pi
 
 sl = SimpleLauncher(use_sim_time = False)
-sl.declare_arg('manual', False)
-
 sl.declare_arg('n', 4, description = 'How many turtles')
 
 
+# we need to use opaque function to resolve arguments as Python types (needed for range)
 def launch_setup():
 
     for k in range(sl.arg('n')):
@@ -19,7 +18,7 @@ def launch_setup():
         theta = 2*pi * random.random()
 
         # turtle #n tracks turtle #(n-1)
-        target = '' if sl.arg('manual') else f'turtle{k+1}'
+        target = f'turtle{k+1}'
         
         with sl.group(ns = name):
         
