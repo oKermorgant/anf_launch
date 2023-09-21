@@ -11,6 +11,7 @@ b = 4
 w = 0.7
 dt = 0.05
 
+
 class Looper(Node):
     def __init__(self):
         super().__init__('looper')
@@ -29,14 +30,14 @@ class Looper(Node):
         self.pose = TeleportAbsolute.Request()
         
         self.timer = self.create_timer(dt, self.update_pose)
-        self.t = 0             
+        self.t = 0
         
     def update_pose(self):
         
         self.t += dt
         
         if self.move_result is not None:
-            # service was called, check if result has arrived
+            # service was called, check if result has arrived otherwise skip this iteration
             if not self.move_result.done():
                 return
             
@@ -49,9 +50,8 @@ class Looper(Node):
         self.pose.theta = atan2(vy, vx)
         
         self.move_result = self.client.call_async(self.pose)
-                
-        
-        
+
+
 rclpy.init()
 looper = Looper()
 
