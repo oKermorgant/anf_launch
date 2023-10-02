@@ -38,9 +38,9 @@ class Tracker(Node):
         self.cmd_vel = self.create_publisher(Twist, 'cmd_vel', 10)
 
         # gains
-        self.Kv = self.declare_bounded_param("Kv", 2., 0., 10., 'Linear gain')
-        self.Kw = self.declare_bounded_param("Kw", 2.5, 0., 10., 'Angular gain')
-        self.d = self.declare_bounded_param("d", 1., 0., 5., 'Tracking distance')
+        self.Kv = self.declare_bounded_param("Kv", 3., 0., 10., 'Linear gain')
+        self.Kw = self.declare_bounded_param("Kw", 3., 0., 10., 'Angular gain')
+        self.d = self.declare_bounded_param("d", 1.5, 0.1, 5., 'Tracking distance')
         self.add_on_set_parameters_callback(self.param_change)
         
         self.timer = self.create_timer(dt, self.compute_cmd)

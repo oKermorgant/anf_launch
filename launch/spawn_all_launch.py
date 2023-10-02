@@ -10,7 +10,9 @@ sl.declare_arg('n', 4, description = 'How many turtles')
 def launch_setup():
 
     # turtle 1 is spawned already
-    for k in range(2, sl.arg('n')+3):
+    for k in range(2, sl.arg('n')+2):
+
+        print(f'Spawing turtle #{k}')
 
         turtle_args = {}
         turtle_args['name'] = name = f'turtle{k}'
