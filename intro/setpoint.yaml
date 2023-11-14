@@ -1,0 +1,7 @@
+setpoint:
+    type: example_interfaces/Float64
+    setpoint:
+        min: -1
+        max: 1
+        to: data
+        default: 0.

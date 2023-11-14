@@ -1,6 +1,19 @@
-Launch file examples for ANF ROS 2
+# Launch file examples for ANF ROS 2
 
-## Basic syntax
+## Dependencies
+
+- `simple_launch`
+- `slider_publisher`
+- [`ros_management_tools`](https://github.com/oKermorgant/ros_management_tools.git) for the tooling part
+
+
+## Basic remapping / parameter example in `intro` folder
+
+Run two nodes that should work together only with remapping.
+
+## Launch files and Turtlesim
+
+### Basic syntax
 
 The `launch` folder includes a few files to run `turtlesim`.
 
@@ -17,7 +30,7 @@ Two additional files can spawn new robots in the simulation:
     - `spawn_all_launch.py` includes `spawn_single_launch.py` several times to spawn multiple robots in the simulation
 
 
-## Robot description and RViz
+### Robot description and RViz
 
 The `bb8` folder includes a launch file that:
     - loads a robot description from a `xacro` file
