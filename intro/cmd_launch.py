@@ -6,13 +6,14 @@ use_remap = True
 def generate_launch_description():
     
     sl = SimpleLauncher()
-    sl.declare_arg('Kp', 0.1)
+    sl.declare_arg('Kp', 0.1, description = 'Control gain')
     
     # run command node
     if use_remap:
         sl.node('anf_launch', 'control.py', output='screen',
                 remappings = {'angle_setpoint': 'setpoint'},
-                parameters = {'Kp': sl.arg('Kp')})
+                parameters = {'Kp': sl.arg('Kp')}
+                )
     else:
         sl.node('anf_launch', 'control.py', output='screen')
 

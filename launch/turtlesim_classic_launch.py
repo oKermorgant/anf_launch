@@ -5,6 +5,7 @@ from launch.conditions import IfCondition, UnlessCondition
 from launch.substitutions import LaunchConfiguration
 from ament_index_python.packages import get_package_share_directory as lookup
 
+
 def generate_launch_description():
     
     ld = LaunchDescription()
@@ -21,7 +22,8 @@ def generate_launch_description():
     control = LaunchConfiguration('control')
     
     # open-loop node
-    loop_node = Node(package='anf_launch', executable='loop', condition = UnlessCondition(manual))
+    loop_node = Node(package='anf_launch', executable='loop', condition = UnlessCondition(manual),
+                     respawn = True)
     
     # manual node
     slider_config = f"{lookup('anf_launch')}/config/Turtle.yaml"
