@@ -5,9 +5,6 @@ from rcl_interfaces.msg import SetParametersResult, ParameterDescriptor, Floatin
 from example_interfaces.msg import Float64
 
 
-smart_param = True
-
-
 class PID(Node):
 
     def __init__(self):
@@ -20,21 +17,12 @@ class PID(Node):
         self.sub = self.create_subscription(Float64, 'angle_setpoint',
                                             self.read_setpoint, 1)
 
-        # basic parameter
-        if not smart_param:
-            self.Kp = self.declare_parameter("Kp", 0.1).value
-            print('Kp initialized to: ', self.Kp)
-
-        else:
-            
-            # smarter version
-            Kp = ParameterDescriptor(
-                name = 'Kp',
-                floating_point_range = [FloatingPointRange(
-                    from_value = 0.,
-                    to_value = 2.,
-                    step = 0.1)])
-            self.Kp = self.declare_parameter(Kp.name, 0.2, Kp).value
+        Kp = ParameterDescriptor(
+            name = 'Kp',
+            floating_point_range = [FloatingPointRange(
+                from_value = 0.,
+                to_value = 2.)])
+        self.Kp = self.declare_parameter(Kp.name, 0.2, Kp).value
         
         self.add_on_set_parameters_callback(self.cb_params)
 

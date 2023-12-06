@@ -1,4 +1,5 @@
 from simple_launch import SimpleLauncher
+from simple_launch.events import When
 import random
 from math import pi
 
@@ -12,7 +13,7 @@ def launch_setup():
     # turtle 1 is spawned already
     for k in range(2, sl.arg('n')+2):
 
-        print(f'Spawing turtle #{k}')
+        sl.log_info(f'Spawing turtle #{k}')
 
         turtle_args = {}
         turtle_args['name'] = name = f'turtle{k}'
@@ -23,7 +24,8 @@ def launch_setup():
         # turtle #n tracks turtle #(n-1)
         turtle_args['target'] = f'turtle{k-1}'
         
-        with sl.group(ns = name):
+        # spawn this turtle after {k} seconds
+        with sl.group(ns = name, when = When(delay = k)):
             sl.include('anf_launch', 'spawn_single_launch.py',
                         launch_arguments=turtle_args)
 
