@@ -4,7 +4,7 @@ import random
 from math import pi
 
 sl = SimpleLauncher(use_sim_time = False)
-sl.declare_arg('n', 4, description = 'How many turtles')
+sl.declare_arg('n', 4, description = 'How many turtles', choices=range(1, 10))
 
 
 # we need to use opaque function to resolve arguments as Python types (needed for range)
